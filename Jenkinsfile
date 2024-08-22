@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AKIA5CBDRAS2S7BRHLVQ') // 使用你的 AWS 凭证 ID
+        AWS_SECRET_ACCESS_KEY = credentials('85lUPyT2daVJUM+GptPPNWu8jM/GMeeq5h659LuiHide')
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -11,17 +16,17 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('jenkinstest')
+                    docker.build('jenkinstest') // 根据需要更改镜像名称
                 }
             }
         }
         
         stage('Deploy to AWS Elastic Beanstalk') {
             steps {
-                withCredentials([aws(credentialsId: 'aws-crential')]) {
-                    sh 'eb init ThisIsNew -r us-east-2'  // 应用名称和区域已经根据你的设置替换
-                    sh 'eb deploy'
-                }
+                sh '''
+                eb init ThisIsNew --platform node.js --region us-east-2
+                eb deploy YLEMTEST
+                '''
             }
         }
     }
