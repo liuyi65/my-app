@@ -22,7 +22,7 @@ pipeline {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credential', // 你的 AWS 凭证 ID，需确保已经在 Jenkins 凭证管理中配置
+                    credentialsId: 'aws-crential', // 你的 AWS 凭证 ID，需确保已经在 Jenkins 凭证管理中配置
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
