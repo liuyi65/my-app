@@ -1,14 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_ACCESS_KEY_ID = credentials('AKIA5CBDRAS2S7BRHLVQ') // 使用你的 AWS 凭证 ID
-        AWS_SECRET_ACCESS_KEY = credentials('85lUPyT2daVJUM+GptPPNWu8jM/GMeeq5h659Lui')
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
+                // 检出 GitHub 仓库的代码
                 git url: 'https://github.com/liuyi65/my-app.git', branch: 'master'
             }
         }
@@ -16,17 +12,25 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('jenkinstest') // 根据需要更改镜像名称
+                    // 构建 Docker 镜像，命名为 jenkinstest
+                    docker.build('jenkinstest')
                 }
             }
         }
         
         stage('Deploy to AWS Elastic Beanstalk') {
             steps {
-                sh '''
-                eb init ThisIsNew --platform node.js --region us-east-2
-                eb deploy YLEMTEST
-                '''
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credential', // 你的 AWS 凭证 ID，需确保已经在 Jenkins 凭证管理中配置
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                    eb init ThisIsNew --platform node.js --region us-east-2
+                    eb deploy YLEMTEST
+                    '''
+                }
             }
         }
     }
