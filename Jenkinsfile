@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_ACCESS_KEY_ID = credentials('AKIA5CBDRAS2S7BRHLVQ') // 使用你的 AWS 凭证 ID
-        AWS_SECRET_ACCESS_KEY = credentials('85lUPyT2daVJUM+GptPPNWu8jM/GMeeq5h659LuiHide')
+        AWS_SECRET_ACCESS_KEY = credentials('85lUPyT2daVJUM+GptPPNWu8jM/GMeeq5h659Lui')
     }
 
     stages {
